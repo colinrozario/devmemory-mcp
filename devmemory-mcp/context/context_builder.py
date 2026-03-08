@@ -1,9 +1,28 @@
-"""Builds contextual information used by DevMemory."""
+from memory.memory_manager import query_memory
 
 
-class ContextBuilder:
-    """Build context from various sources."""
+def build_context(query):
 
-    def build(self, sources):
-        """Return consolidated context from provided sources."""
-        return {}
+    results = query_memory(query)
+
+    docs = results["documents"][0]
+
+    context = "\n".join(docs)
+
+    prefix = f"""
+PROJECT MEMORY CONTEXT
+
+Important past decisions:
+
+{context}
+
+Follow these conventions when writing code.
+"""
+
+    return prefix
+
+
+def write_claude_md(context):
+
+    with open("CLAUDE.md", "w") as f:
+        f.write(context)

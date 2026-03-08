@@ -1,0 +1,2 @@
+[console_scripts]
+devmemory-mcp = server:main

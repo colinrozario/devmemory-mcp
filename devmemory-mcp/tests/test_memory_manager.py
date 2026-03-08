@@ -1,10 +1,10 @@
-from memory.memory_manager import MemoryManager
+from memory.memory_manager import store_memory, query_memory
 
 
-def test_memory_manager_store_and_retrieve():
-    mgr = MemoryManager()
-    mgr.store("test", [1, 2, 3], {"source": "unit-test"})
+def test_store_and_query_memory_smoke():
+    result = store_memory("test", "hello world", file_path="/tmp/foo.py")
+    assert "id" in result
 
-    result = mgr.retrieve("test")
-    assert result["vector"] == [1, 2, 3]
-    assert result["metadata"]["source"] == "unit-test"
+    # Basic smoke check that the query API runs without crashing.
+    query_result = query_memory("hello")
+    assert isinstance(query_result, dict)

@@ -1,9 +1,11 @@
-"""Watches the git repository for changes and triggers automation."""
+import time
+from git_integration.diff_intelligence import analyze_last_commit
 
 
-class GitWatcher:
-    """A simple placeholder for git change watching."""
+def watch_repo(repo_path):
 
-    def start(self):
-        """Start watching for changes."""
-        pass
+    while True:
+
+        analyze_last_commit(repo_path)
+
+        time.sleep(60)

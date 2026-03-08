@@ -1,9 +1,26 @@
-"""Analyze diffs for intelligence and insights."""
+from git import Repo
+from memory.memory_manager import store_memory
 
 
-class DiffIntelligence:
-    """Extracts intelligence from git diffs."""
+def analyze_last_commit(repo_path):
 
-    def analyze(self, diff_text):
-        """Analyze a diff and return insights."""
-        return {}
+    repo = Repo(repo_path)
+
+    commit = repo.head.commit
+
+    diff = commit.diff(commit.parents[0])
+
+    for change in diff:
+
+        file_path = change.a_path
+
+        summary = f"""
+File changed: {file_path}
+Commit message: {commit.message}
+"""
+
+        store_memory(
+            "code_change",
+            summary,
+            file_path
+        )

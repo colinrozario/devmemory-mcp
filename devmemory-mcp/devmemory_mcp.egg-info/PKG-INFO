@@ -1,0 +1,27 @@
+Metadata-Version: 2.4
+Name: devmemory-mcp
+Version: 0.1.0
+Summary: DevMemory MCP server and supporting modules.
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+Requires-Dist: chromadb
+Requires-Dist: sentence-transformers
+
+# DevMemory MCP
+
+A minimal prototype of a memory-backed assistant framework.
+
+## Getting started
+
+Run directly:
+
+```bash
+python -m devmemory_mcp
+```
+
+Or install and run via script:
+
+```bash
+pip install -e .
+devmemory-mcp
+```

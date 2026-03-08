@@ -1,9 +1,19 @@
-"""Summarizes session activity into a concise form."""
+from memory.memory_manager import store_memory
 
 
-class SessionSummarizer:
-    """Generate a summary of a session."""
+def summarize_session(notes):
 
-    def summarize(self, session_data):
-        """Return a summary for the given session data."""
-        return ""
+    summary = f"""
+Session Summary
+
+{notes}
+
+Stored for future reasoning.
+"""
+
+    store_memory(
+        "session_summary",
+        summary
+    )
+
+    return summary
