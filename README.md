@@ -1,6 +1,6 @@
-# DevMemory MCP 
+# devmemory MCP 
 
-Hey there!  Welcome to **DevMemory MCP**. This is my very first time building a Model Context Protocol (MCP) server, and I'm super excited to share it! 
+Hey there!  Welcome to **devmemory MCP**. This is my very first time building a Model Context Protocol (MCP) server, and I'm super excited to share it! 
 
 This project is a minimal prototype of a memory-backed assistant framework. It's designed to give your AI assistants long-term memory by storing context, code snippets, file paths, and function names, then pulling up relevant memories using vector embeddings. Under the hood, it uses ChromaDB and Sentence Transformers to keep track of everything your AI needs to know across sessions.
 
