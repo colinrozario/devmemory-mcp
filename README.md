@@ -66,4 +66,4 @@ Once the server is running, the following endpoints are available:
 
 Since this is my first MCP server, it's definitely a work in progress, but it's been an awesome learning experience shaping up this memory tier. Feel free to use it, break it, dive into the code, or contribute!
 
-Happy coding! Build with love by Colin Michael
+Happy coding! Built with love by Colin Michael
