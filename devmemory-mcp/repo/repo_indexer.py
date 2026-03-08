@@ -1,12 +1,24 @@
-"""Indexing logic for repository files."""
+import os
+from .function_parser import extract_functions
 
 
-class RepoIndexer:
-    """Indexes repository files for quick lookup."""
+def scan_repo(repo_path):
 
-    def __init__(self, root_path=None):
-        self.root_path = root_path
+    repo_map = []
 
-    def index(self):
-        """Placeholder method for indexing."""
-        return []
+    for root, dirs, files in os.walk(repo_path):
+
+        for file in files:
+
+            if file.endswith(".py"):
+
+                path = os.path.join(root, file)
+
+                functions = extract_functions(path)
+
+                repo_map.append({
+                    "file": path,
+                    "functions": functions
+                })
+
+    return repo_map
