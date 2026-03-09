@@ -1,112 +1,130 @@
-# devmemory MCP 
+#  devmemory MCP
 
-Hey there! Welcome to **devmemory MCP**. This is my very first time building a **Model Context Protocol (MCP)** server, and I'm super excited to share it.
+> **Give your AI coding assistants the long-term memory they deserve.**
 
-This project is a minimal prototype of a **memory-backed assistant framework** designed to give AI coding assistants long-term memory. It stores project decisions, code snippets, file paths, function-level context, and debugging insights, then retrieves relevant knowledge using semantic vector search powered by **ChromaDB** and **Sentence Transformers**.
+Hey there! Welcome to **devmemory MCP**. If you've ever felt the pain of explaining your project's architecture, past bugs, and coding standards to an AI assistant for the hundredth time, you're in the right place.
 
-## Why This Exists
+This project is a powerful **memory-backed assistant framework** designed to give your AI tools persistent, long-term memory. It stores your project's critical decisions, code snippets, file paths, function-level context, and debugging insights. It then retrieves exactly what the AI needs using semantic vector search powered by **ChromaDB** and **Sentence Transformers**, directly integrating into Cursor, Claude Desktop, and beyond through the **Model Context Protocol (MCP)**.
 
-Modern AI coding assistants are incredibly powerful, but they still suffer from several major limitations that slow down real-world development workflows.
+---
 
-### 1. Short-Term Memory Only
+##  Why You Need This (The Problem)
 
-Most assistants forget everything between sessions. Important architectural decisions, debugging insights, and reasoning are lost once a conversation ends. Developers repeatedly have to explain the same project context again and again.
+Modern AI coding assistants are incredibly impressive, but they suffer from gold-fish memory. They are limited by the context window of your current session.
 
-### 2. Lack of Project-Level Understanding
+### 1. Groundhog Day, Every Day 
+Most assistants forget everything between sessions. Important architectural decisions, debugging insights, and complex reasoning are lost once a conversation ends. You repeatedly have to explain the same project context over and over.
 
-AI tools typically reason only over the files currently in context. They rarely retain deeper understanding of the system's architecture, design decisions, or historical changes across the repository.
+### 2. Lack of Project-Wide Intelligence 
+AI tools typically reason **only** over the files currently open in your editor. They rarely retain a deep understanding of the system's architecture, design decisions, or historical changes across your repository.
 
-### 3. No “Why” Behind the Code
+### 3. The Missing “Why” 
+AI assistants can read code and understand *what* it does, but they usually cannot answer questions like:
+* *Why was this specific function implemented this way?*
+* *Why was this architecture chosen over the alternatives?*
+* *What specific bug from three months ago led to this weird workaround?*
 
-AI assistants can read code, but they usually cannot answer questions like:
+The reasoning behind code decisions vanishes the moment the PR is merged.
 
-* *Why was this function implemented this way?*
-* *Why was this architecture chosen?*
-* *What bug led to this workaround?*
+### 4. No Persistent Debugging History 
+Bug fixes, root causes, and troubleshooting steps are rarely preserved in a structured way. When similar problems appear months later, you and your AI must rediscover the exact same solutions from scratch.
 
-The reasoning behind code decisions often disappears over time.
+---
 
-### 4. No Persistent Debugging History
+##  What devmemory MCP Solves (The Solution)
 
-Bug fixes, root causes, and troubleshooting steps are rarely preserved in a structured way. When similar problems appear later, developers must rediscover the same solutions.
+**devmemory MCP** introduces a **persistent memory layer** for your AI assistants. By plugging this MCP server into Claude Desktop, Cursor, or any MCP-compatible client, your AI can suddenly:
 
-### 5. Fragmented Context Across Tools
+-  **Store and Retrieve Project Decisions:** Automatically save coding standards and debugging insights.
+-  **Attach Knowledge to Code:** Bind specific memories, rationale, and context to exact file paths and functions.
+-  **Semantic Search (ChromaDB):** Retrieve highly relevant historical context using natural language vector search.
+-  **Maintain a “Why Did We Do This?” Database:** Keep a searchable knowledge base of your architecture.
+-  **Generate Project Context:** Automatically compile relevant context documents for future AI sessions.
 
-Developers often switch between multiple AI tools and IDE assistants. Each tool maintains its own isolated context, meaning project knowledge cannot be easily shared or reused across environments.
+By giving AI assistants a structured, queryable memory system, devmemory MCP transforms stateless AI autocomplete tools into **context-aware senior collaborators that improve over time**.
 
-## What devmemory MCP Solves
-
-devmemory MCP introduces a **persistent memory layer for AI assistants**. It allows agents to:
-
-• Store project decisions, coding standards, and debugging insights
-• Attach knowledge to specific files and functions
-• Retrieve relevant historical context using semantic search
-• Maintain a searchable “why did we do this?” knowledge base
-• Automatically generate project context for future AI sessions
-
-By giving AI assistants a structured memory system, devmemory MCP helps transform stateless AI tools into **context-aware collaborators that improve over time**.
-
+---
 
 ##  Features
 
-- **Store Memories**: Save important context and associate it with specific file paths or functions.
-- **Search Context**: Quickly find relevant memories using semantic search queries.
-- **Session Summaries**: Automatically summarize your development sessions to keep a log of what was done.
-- **Context Builder**: Compile relevant context documents for your AI and automatically export them to Markdown (`write_claude_md`).
+Through the powers of the Model Context Protocol, this server exposes powerful tools directly to the AI:
+
+- **`add_memory`**: Save important context and associate it with specific file paths or functions.
+- **`search_memory`**: Quickly find relevant memories using semantic natural language search queries.
+- **`summarize`**: Automatically summarize your development sessions to keep a log of what was done.
+- **`build_and_write_context`**: Compile relevant context documents from your memory and automatically export them to a `CLAUDE.md` file for deep editor integration.
+
+---
 
 ##  Getting Started
 
 ### Prerequisites
 
-Make sure you have Python 3.10 or higher installed on your machine.
+You need **Python 3.10+** installed on your machine.
 
 ### Installation
 
-You can easily install the package and its dependencies (`chromadb`, `sentence-transformers`, etc.) for local development:
+Clone the repository and install the package along with its dependencies (`chromadb`, `sentence-transformers`, `mcp`, etc.) for local development:
 
 ```bash
 # Clone the repository
 git clone <your-repo-url>
-cd devmemory-mcp
+cd <your-repo-dir>/devmemory-mcp
 
 # Install via pip in editable mode
 pip install -e .
 ```
 
-*Note: The server uses FastAPI, so make sure to install it along with Uvicorn or another ASGI server to run it.*
+### Hooking it up to your AI Assistant
 
-### Running the Server
+Because `devmemory` uses the **Model Context Protocol (MCP)** via `FastMCP`, integrating it into your AI workflows is incredibly easy.
 
-You can start the server in a couple of ways depending on your setup:
+####  Claude Desktop Integration
 
-**Run the module directly:**
-```bash
-python -m devmemory_mcp
+To use it in **Claude Desktop**, edit your `claude_desktop_config.json` (found in `%APPDATA%\Claude\claude_desktop_config.json` on Windows or `~/Library/Application Support/Claude/claude_desktop_config.json` on macOS) and add the following:
+
+```json
+{
+  "mcpServers": {
+    "devmemory": {
+      "command": "uvx",
+      "args": [
+        "--directory",
+        "<ABSOLUTE_PATH_TO_YOUR_REPO>/devmemory-mcp",
+        "devmemory-mcp"
+      ]
+    }
+  }
+}
 ```
 
-**Or run it via the installed console script:**
-```bash
-devmemory-mcp
-```
+*Alternatively, if you installed it globally or simply want to point to the virtual environment's executable, you can use the absolute path to `devmemory-mcp` as the command.*
 
-##  API Endpoints
+####  Cursor IDE Integration
 
-Once the server is running, the following endpoints are available:
+1. Open **Cursor Settings** -> **Features** -> **MCP**.
+2. Click **+ Add New MCP Server**.
+3. Select type: `command`.
+4. Name: `devmemory`.
+5. Command: `devmemory-mcp` *(Note: Provide the absolute path to your Python virtual environment's binary if it's not in your global PATH, e.g., `<path-to-repo>/.venv/Scripts/devmemory-mcp`)*.
 
-- `POST /store_memory`: Add a new memory (requires `type`, `content`, and optional `file_path`, `function_name`).
-- `GET /search_memory?query=...`: Search your vector store using natural language.
-- `POST /summarize_session`: Generate a summary of your session notes.
-- `GET /build_context?query=...`: Build a context document from your memory and write it out for Claude/Other AI editors.
+Boom! Cursor and Claude now have an immortal memory. When you work, ask them to "save this architecture decision to memory" or "search memory for why we configured the database this way".
+
+---
 
 ##  Built With
 
 - **Python 3.10+**
-- **FastAPI** — For highly performant API endpoints
-- **ChromaDB** — Vector database for long-term storage
-- **Sentence Transformers** (`all-MiniLM-L6-v2`) — For embedding text
+- **[FastMCP](https://github.com/jlowin/fastmcp)** — A high-level framework for building MCP servers easily
+- **ChromaDB** — The open-source AI-native vector database
+- **Sentence Transformers** (`all-MiniLM-L6-v2`) — For incredibly fast and accurate local text embedding
 
-##  Final Thoughts
+---
 
-Since this is my first MCP server, it's definitely a work in progress, but it's been an awesome learning experience shaping up this memory tier. Feel free to use it, break it, dive into the code, or contribute!
+## ❤️ Final Thoughts
 
-Happy coding! Built with love by Colin Michael
+Since this is my very first MCP server, it's definitely a work in progress, but it's been an awesome learning experience building a memory tier for AIs. The future of AI isn't just large windows—it's persistent state.
+
+Feel free to use it, break it, dive into the code, or contribute via PRs!
+
+Happy coding! Built with love by **Colin Michael**
