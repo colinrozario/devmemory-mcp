@@ -22,8 +22,12 @@ def store_memory(
         "file": file_path,
         "function": function_name
     }
+    
+    # ChromaDB does not support None values in metadata dictionaries. 
+    # We must filter out any keys where the value is None before passing it.
+    clean_metadata = {k: v for k, v in metadata.items() if v is not None}
 
-    add_vector(content, metadata)
+    add_vector(content, clean_metadata)
 
     return {"id": memory_id}
 
