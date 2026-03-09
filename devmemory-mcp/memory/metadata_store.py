@@ -1,8 +1,15 @@
 import sqlite3
 import uuid
+import os
 from datetime import datetime
 
-conn = sqlite3.connect("data/memory.db", check_same_thread=False)
+# Get absolute path to the data directory, creating it if it doesn't exist
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DB_DIR = os.path.join(BASE_DIR, "data")
+os.makedirs(DB_DIR, exist_ok=True)
+DB_PATH = os.path.join(DB_DIR, "memory.db")
+
+conn = sqlite3.connect(DB_PATH, check_same_thread=False)
 cursor = conn.cursor()
 
 cursor.execute("""

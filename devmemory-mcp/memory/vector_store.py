@@ -1,12 +1,17 @@
 import chromadb
+import os
 from chromadb.config import Settings
 from sentence_transformers import SentenceTransformer
 
 model = SentenceTransformer("all-MiniLM-L6-v2")
 
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+VECTOR_DIR = os.path.join(BASE_DIR, "data", "vectors")
+os.makedirs(VECTOR_DIR, exist_ok=True)
+
 chroma = chromadb.Client(
     Settings(
-        persist_directory="data/vectors"
+        persist_directory=VECTOR_DIR
     )
 )
 
