@@ -35,8 +35,6 @@ def add_vector(doc, metadata):
         ids=[metadata["id"]]
     )
 
-    chroma.persist()
-
 
 def search_vectors(query, k=5):
 
